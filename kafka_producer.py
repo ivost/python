@@ -12,15 +12,16 @@ producer = KafkaProducer(bootstrap_servers='localhost:9092', value_serializer=la
 
 for _ in range(5):
 	print("sending...")
-	producer.send('mytopic', {'foo': 'bar'})
-	#producer.send('mytopic', b'MESSAGE')
-	#producer.flush()
+	producer.send('mytopic', {'foo': 'bar', 'age': 21})
+	producer.flush()
 	sleep(1)
 
 '''
 
 
 producer = KafkaProducer(bootstrap_servers='localhost:9092', value_serializer=lambda v: json.dumps(v).encode('utf-8'))
+
+	#producer.send('mytopic', b'MESSAGE')
 
 for _ in range(3):
 	print("sending...")
