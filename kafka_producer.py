@@ -1,14 +1,11 @@
 from kafka.client import KafkaClient
-from kafka.producer import SimpleProducer
 from kafka.producer import KafkaProducer
 from time import sleep
-from datetime import datetime
 import json
 
 print("kafka sender")
 
 producer = KafkaProducer(bootstrap_servers='localhost:9092', value_serializer=lambda v: json.dumps(v).encode('utf-8'))
-#producer = KafkaProducer(bootstrap_servers='localhost:9092')
 
 for _ in range(5):
 	print("sending...")
@@ -16,8 +13,11 @@ for _ in range(5):
 	producer.flush()
 	sleep(1)
 
-'''
 
+'''
+from datetime import datetime
+
+#producer = KafkaProducer(bootstrap_servers='localhost:9092')
 
 producer = KafkaProducer(bootstrap_servers='localhost:9092', value_serializer=lambda v: json.dumps(v).encode('utf-8'))
 
