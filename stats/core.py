@@ -7,8 +7,11 @@ If your array contains more than one modal value, choose the numerically smalles
         raise(ValueError("n is 0"))
 """
 import math
+import pprint
 
-eps = 0.0001
+eps = 0.001
+pp = pprint.PrettyPrinter(indent=4)
+
 
 def mean(a):
     """
@@ -73,9 +76,30 @@ def quartiles(a):
     return q1, q2, q3
 
 
+def expand_freq(a, f):
+    """
+    given array a and frequencies array f expand every element from a
+    according to f
+    :param a:
+    :param f:
+    :return: sorted expanded array
+    """
+    x = []
+    for i in xrange(len(a)):
+        for j in xrange(f[i]):
+            x.append(a[i])
+    return sorted(x)
+
+
+def iq_range(a):
+    q = quartiles(a)
+    return q[2] - q[0]
+
+
 def mode(a):
     """
     most frequent number
+    todo: simplify using Counter
     :param a: sorted array
     :param n:
     :return: most frequent number or smallest
@@ -188,6 +212,23 @@ def cumulative_prob(from_num, to_num, n, p):
     #print('cumulative_prob {}:{}, n {}, p {:.5f} -> {:.5f}'.format(from_num, to_num, n, p, total))
     return total
 
+def poisson_distr(k, s):
+    """
+    A Poisson experiment is a statistical experiment that has the following properties:
+
+    The outcome of each trial is either success or failure.
+    The average number of successes sigma that occurs in a specified region is known.
+    The probability that a success will occur is proportional to the size of the region.
+    The probability that a success will occur in an extremely small region is virtually zero.
+    A Poisson random variable is the number of successes that result from a Poisson experiment.
+    The probability distribution of a Poisson random variable is called a Poisson distribution.
+    example: for k=3, s=3 -> 0.180
+
+    :param k:
+    :param s:
+    :return:
+    """
+    return (float(pow(s, k)) * math.exp(-s)) / fact(k)
 
 def feq(a, b):
     return abs(a - b) < eps
@@ -270,10 +311,25 @@ def test():
     # prob. of getting at most 5 heads
     #cumulative_prob(0, 5, 10, 0.5)
     #cumulative_prob(5, 10, 10, 0.5)
-    """
-
     assert feq(geom_distr(5, 0.7), 0.00567)
 
+    pfloat(binomial_distr(9, 12, 0.8))
+
+    for k in range(5):
+        pfloat(num_comb(4, k))
+    a = [10, 5]
+    f = [2, 1]
+    x = expand_freq(a, f)
+    #pp.pprint(x)
+    assert x == [5, 10, 10]
+
+    a = [6, 12, 8, 10, 20, 16]
+    f = [5, 4, 3, 2, 1, 5]
+    x = expand_freq(a, f)
+    r = iq_range(x)
+    """
+    r = poisson_distr(3, 2)
+    assert feq(r, 0.180)
 
 if __name__ == '__main__':
     test()
