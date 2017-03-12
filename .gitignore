@@ -5,6 +5,7 @@ __pycache__/
 bin
 *.iml
 .idea
+flask
 
 # C extensions
 *.so
