@@ -6,7 +6,8 @@ bin
 *.iml
 .idea
 flask
-
+p3
+bin
 # C extensions
 *.so
 
