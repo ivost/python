@@ -17,7 +17,7 @@ def solve(formula):
 
 def fill_in(formula):
     "Generate all possible fillings-in of letters in formula with digits."
-    letters = ''.join(set(re.findall('[A-Z]', formula)))  # should be a string
+    #letters = ''.join(set(re.findall('[A-Z]', formula)))  # should be a string
     for digits in itertools.permutations('1234567890', len(letters)):
         #table = string.maketrans(letters, ''.join(digits))
         #table = letters +
