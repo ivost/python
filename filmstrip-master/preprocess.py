@@ -10,6 +10,7 @@ import math
 import cv2
 import argparse
 
+
 def getInfo(sourcePath):
     cap = cv2.VideoCapture(sourcePath)
     info = {
@@ -22,6 +23,7 @@ def getInfo(sourcePath):
     cap.release()
     return info
 
+
 #
 # Extracts one frame for every second second of video.
 # Effectively compresses a video down into much less data.
@@ -32,13 +34,13 @@ def extractFrames(sourcePath, destPath, verbose=False):
     cap = cv2.VideoCapture(sourcePath)
     fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
     out = cv2.VideoWriter(destPath,
-        fourcc,
-        info["fps"],
-        (info["width"], info["height"]))
+                          fourcc,
+                          info["fps"],
+                          (info["width"], info["height"]))
     fps_int = math.ceil(info["fps"])
 
     ret = True
-    while(cap.isOpened() and ret):
+    while (cap.isOpened() and ret):
         ret, frame = cap.read()
         frame_number = math.ceil(cap.get(cv2.CAP_PROP_POS_FRAMES) - 1)
         if frame_number % fps_int == 0:
@@ -74,17 +76,17 @@ def extractROI(sourcePath, destPath, points, verbose=False):
 
     fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
     out = cv2.VideoWriter(destPath,
-        fourcc,
-        info["fps"],
-        (width, height))
+                          fourcc,
+                          info["fps"],
+                          (width, height))
 
     ret = True
-    while(cap.isOpened() and ret):
+    while (cap.isOpened() and ret):
         ret, frame = cap.read()
         if frame is None:
             break
 
-        roi = frame[y:y+height, x:x+width]
+        roi = frame[y:y + height, x:x + width]
 
         out.write(roi)
 
