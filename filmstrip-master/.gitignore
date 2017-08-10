@@ -1,0 +1,6 @@
+output
+preview/static
+web/node_modules
+web/data/*
+videos
+sample-input
