@@ -17,7 +17,7 @@ def diag():
             print(i)
 
 # https://github.com/opencv/opencv/issues/8885
-
+diag()
 
 def convert_img(img_file):
     in_path = inp_dir + img_file
@@ -80,4 +80,4 @@ thumbnail = cv.CreateImage( ( size[0] / 10, size[1] / 10), im.depth, im.nChannel
         break
 '''
 
-cv2.destroyAllWindows()
+# cv2.destroyAllWindows()
