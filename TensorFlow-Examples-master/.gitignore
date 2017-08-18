@@ -1,4 +1,7 @@
 .DS_Store
+
+**/MNIST_data/
+
 .ipynb_checkpoints
 *.pyc
 __pycache__
@@ -12,7 +15,9 @@ checkpoint
 htmlcov
 mnist
 
-**/MNIST_data/*
+MNIST_data/
+
+**/MNIST_data/
 
 *.gz
 *.ubyte
