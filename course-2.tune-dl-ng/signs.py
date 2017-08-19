@@ -990,7 +990,7 @@ def model(X_train, Y_train, X_test, Y_test, learning_rate = 0.0001,
     init = tf.global_variables_initializer()
 
     # Start the session to compute the tensorflow graph
-    with tf.Session() as sess:
+    with tf.Session(config=tf.ConfigProto(log_device_placement=True) as sess:
         
         # Run the initialization
         sess.run(init)
@@ -1052,5 +1052,5 @@ def model(X_train, Y_train, X_test, Y_test, learning_rate = 0.0001,
 
 # In[51]:
 
-with tf.device("/gpu:0"):
-    parameters = model(X_train, Y_train, X_test, Y_test)
+#with tf.device("/gpu:0"):
+parameters = model(X_train, Y_train, X_test, Y_test)
