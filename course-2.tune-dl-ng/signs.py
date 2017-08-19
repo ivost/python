@@ -552,7 +552,7 @@ X_train_orig, Y_train_orig, X_test_orig, Y_test_orig, classes = load_dataset()
 
 # Example of a picture
 index = 0
-plt.imshow(X_train_orig[index])
+#plt.imshow(X_train_orig[index])
 print ("y = " + str(np.squeeze(Y_train_orig[:, index])))
 
 
