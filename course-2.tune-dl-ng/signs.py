@@ -29,7 +29,8 @@ from tensorflow.python.framework import ops
 from tf_utils import load_dataset, random_mini_batches, convert_to_one_hot, predict
 import time
 
-get_ipython().magic('matplotlib inline')
+#get_ipython().magic('matplotlib inline')
+
 np.random.seed(1)
 
 
@@ -1051,77 +1052,5 @@ def model(X_train, Y_train, X_test, Y_test, learning_rate = 0.0001,
 
 # In[51]:
 
-
-parameters = model(X_train, Y_train, X_test, Y_test)
-
-
-# **Expected Output**:
-# 
-# <table> 
-#     <tr> 
-#         <td>
-#             **Train Accuracy**
-#         </td>
-#         <td>
-#         0.999074
-#         </td>
-#     </tr>
-#     <tr> 
-#         <td>
-#             **Test Accuracy**
-#         </td>
-#         <td>
-#         0.716667
-#         </td>
-#     </tr>
-# 
-# </table>
-# 
-# Amazing, your algorithm can recognize a sign representing a figure between 0 and 5 with 71.7% accuracy.
-# 
-# **Insights**:
-# - Your model seems big enough to fit the training set well. However, given the difference between train and test accuracy, you could try to add L2 or dropout regularization to reduce overfitting. 
-# - Think about the session as a block of code to train the model. Each time you run the session on a minibatch, it trains the parameters. In total you have run the session a large number of times (1500 epochs) until you obtained well trained parameters.
-
-# ### 2.7 - Test with your own image (optional / ungraded exercise)
-# 
-# Congratulations on finishing this assignment. You can now take a picture of your hand and see the output of your model. To do that:
-#     1. Click on "File" in the upper bar of this notebook, then click "Open" to go on your Coursera Hub.
-#     2. Add your image to this Jupyter Notebook's directory, in the "images" folder
-#     3. Write your image's name in the following code
-#     4. Run the code and check if the algorithm is right!
-
-# In[ ]:
-
-
-import scipy
-from PIL import Image
-from scipy import ndimage
-
-## START CODE HERE ## (PUT YOUR IMAGE NAME) 
-my_image = "thumbs_up.jpg"
-## END CODE HERE ##
-
-# We preprocess your image to fit your algorithm.
-fname = "images/" + my_image
-image = np.array(ndimage.imread(fname, flatten=False))
-my_image = scipy.misc.imresize(image, size=(64,64)).reshape((1, 64*64*3)).T
-my_image_prediction = predict(my_image, parameters)
-
-plt.imshow(image)
-print("Your algorithm predicts: y = " + str(np.squeeze(my_image_prediction)))
-
-
-# You indeed deserved a "thumbs-up" although as you can see the algorithm seems to classify it incorrectly. The reason is that the training set doesn't contain any "thumbs-up", so the model doesn't know how to deal with it! We call that a "mismatched data distribution" and it is one of the various of the next course on "Structuring Machine Learning Projects".
-
-# <font color='blue'>
-# **What you should remember**:
-# - Tensorflow is a programming framework used in deep learning
-# - The two main object classes in tensorflow are Tensors and Operators. 
-# - When you code in tensorflow you have to take the following steps:
-#     - Create a graph containing Tensors (Variables, Placeholders ...) and Operations (tf.matmul, tf.add, ...)
-#     - Create a session
-#     - Initialize the session
-#     - Run the session to execute the graph
-# - You can execute the graph multiple times as you've seen in model()
-# - The backpropagation and optimization is automatically done when running the session on the "optimizer" object.
+with tf.device("/gpu:0"):
+    parameters = model(X_train, Y_train, X_test, Y_test)
