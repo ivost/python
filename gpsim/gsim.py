@@ -5,15 +5,12 @@ import serial
 import re
 import datetime
 
-# $GPGGA,194950.000,3253.5959,N,11711.7638,W,1,10,1.1,77.5,M,-35.6,M,,0000*5D
-# $GPGGA,135023.000,3253.5959,N,11711.7638,W,1,8,1.1,58.2,M,-35.6,M,,0000*68
-# $GPRMC,194948.000,A,3253.5836,N,11711.7921,W,46.96,65.60,300517,,,A*78
-# $GPRMC,135023.000,A,3253.5959,N,11711.7638,W,46.96,65.60,090617,,,A*71
-
 '''
-(No. of Satellites from GGA sentence >= 4)
-AND (HDOP from GGA sentence <= 10)
-AND (Quality parameter from GGA should indicate that fix is valid)'''
+    GPS Simulator - emits sentences from nmea file to serial port, 
+    replaces timestamps with current UTC time 
+'''
+SERIAL = "/dev/ttyUSB0"
+FILE = "test.nmea"
 
 def number_format_for_GPRMC(number):
     if number < 0 or number > 999.9:
@@ -81,9 +78,9 @@ def modify_GGAquality(gpsline,GGAquality):
         os._exit(0)
 
 def modify_timeanddate(gpsline):
-    szTime = "%s%s%s.000" % (time.strftime("%H"), time.strftime("%M"), time.strftime("%S"))
+    #szTime = "%s%s%s.000" % (time.strftime("%H"), time.strftime("%M"), time.strftime("%S"))
     # szTime = bytes(szTime, 'utf8')
-    szDate = "%s%s%s" % (time.strftime("%d"), time.strftime("%m"), time.strftime("%y"))
+    #szDate = "%s%s%s" % (time.strftime("%d"), time.strftime("%m"), time.strftime("%y"))
     # szDate = bytes(szDate, 'utf8')
 
     utc = datetime.datetime.utcnow()
@@ -135,7 +132,6 @@ class GPSsimulator:
         self.Thsendgps.start()
 
     def open(self):
-
         ret = False
         try:
             print(self.serial)
@@ -143,6 +139,7 @@ class GPSsimulator:
 
         except serial.SerialException as e:
             print(sys.exc_info(), e.__cause__)
+            ExitFlag = True
         else:
             ret = True
 
@@ -154,41 +151,59 @@ class GPSsimulator:
             self.serial.close()
             # print('serial close')
 
+    def is_running(self):
+        return self.running
+
     def send_gps(self, filename):
         linenumber = 1
         print('gps thread started')
-        f = open(filename, 'r')
         try:
+            f = open(filename, 'r')
+            lines = f.readlines()
+            f.close()
+            # loop over lines
             while self.running:
-                for line in f.readlines():
+                for line in lines:
                     line = modify_timeanddate(line)
-                    # line = "%s\r\n" % line[:-1]
-                    # line = bytes(line, encoding='utf8')
                     line = bytes(line,encoding='utf8')[:-3]
                     gpssum = nmeasum(line)
                     Msg = line + gpssum + b'\r\n'
                     print("%d\t%s" % (linenumber, Msg))
                     self.serial.write(Msg)
                     if linenumber%2 == 0:
-                        # self.serial.flushOutput()
-                        # self.serial.flushInput()
-                        print("wait 0.998 second")
+                        #print("wait 0.998 second")
                         time.sleep(0.998)
                     else:
-                        print("wait 0.001 second")
+                        #print("wait 0.001 second")
                         time.sleep(0.001)
                     linenumber += 1
-        except serial.SerialException as e:
+                    # self.serial.flushOutput()
+                    # self.serial.flushInput()
+        except Exception as e:
+            ExitFlag = True
             self.running = False
-            print('SerialException:' + str(e))
+            print('Exception:' + str(e))
             # self.terminal.cancel()
         finally:
+            ExitFlag = True
             print("gps thread quit")
 
 
 if __name__ == "__main__":
-    sb = GPSsimulator('/dev/ttyUSB0', "raw nmea miramar road modified w new rules non stationary.nmea")
-    # sb = GPSsimulator('COM10', "raw nmea 56w gpgga gprmc w rules.nmea")
-    while True:
+    print(f"GPSsimulator - port: {SERIAL}, file: {FILE}")
+
+    sb = GPSsimulator(SERIAL, FILE)
+
+    while not sb.is_running():
         time.sleep(1)
 
+
+'''
+(No. of Satellites from GGA sentence >= 4)
+AND (HDOP from GGA sentence <= 10)
+AND (Quality parameter from GGA should indicate that fix is valid)
+# $GPGGA,194950.000,3253.5959,N,11711.7638,W,1,10,1.1,77.5,M,-35.6,M,,0000*5D
+# $GPGGA,135023.000,3253.5959,N,11711.7638,W,1,8,1.1,58.2,M,-35.6,M,,0000*68
+# $GPRMC,194948.000,A,3253.5836,N,11711.7921,W,46.96,65.60,300517,,,A*78
+# $GPRMC,135023.000,A,3253.5959,N,11711.7638,W,46.96,65.60,090617,,,A*71
+'''
