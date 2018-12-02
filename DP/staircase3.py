@@ -26,3 +26,5 @@ assert s.howManyWays(3) == 4
 assert s.howManyWays(4) == 7
 assert s.howManyWays(5) == 13
 assert s.howManyWays(6) == 24
+
+print("all good")
