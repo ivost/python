@@ -17,7 +17,7 @@ class Solution:
     Mem = []
 
     @profile
-    def steal(self, p, n):
+    def stealRec(self, p, n):
         """
         max amnt from house 1 to n (inclusive)
         :param p:
@@ -38,12 +38,29 @@ class Solution:
         else:
             # n >= 3
             # print("n", n, "p", p, "mem", mem)
-            Max = max(self.steal(p, n-2) + p[n-1], self.steal(p, n-1))
+            Max = max(self.stealRec(p, n - 2) + p[n - 1], self.stealRec(p, n - 1))
 
         mem.append(Max)
         # print("Max", Max)
         return Max
 
+    @profile
+    def steal(self, p, n):
+        """
+        max amnt from house 1 to n (inclusive)
+        :param p:
+        :param n:
+        :return:
+        """
+        if n < 1:
+            return 0
+        if n == 1:
+            return p[0]
+        R = [p[0], max(p[0], p[1])]
+        for i in range(2, n):
+            R.append(R[i-1])
+            R[i] = max(R[i-1], R[i-2]+p[i])
+        return R[n-1]
 
 s = Solution()
 
@@ -51,6 +68,21 @@ p = [10, 20, 30, 100]
 
 @profile
 def test1():
+    a = s.stealRec(p, 1)
+    assert a == 10
+
+    a = s.stealRec(p, 2)
+    assert a == 20
+
+    a = s.stealRec(p, 3)
+    assert a == 40
+
+    a = s.stealRec(p, 4)
+    assert a == 120
+
+
+@profile
+def test2():
     a = s.steal(p, 1)
     assert a == 10
 
@@ -64,8 +96,8 @@ def test1():
     assert a == 120
 
 test1()
-# test2()
+test2()
 
 print_prof_data()
-# test1 22 us
+# test1 35 us, test2 16 us
 print("all good")
