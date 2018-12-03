@@ -101,3 +101,4 @@ test2()
 print_prof_data()
 # test1 35 us, test2 16 us
 print("all good")
+
