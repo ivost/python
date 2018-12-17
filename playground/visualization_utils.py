@@ -135,7 +135,7 @@ def draw_bounding_box_on_image(image,
                                xmin,
                                ymax,
                                xmax,
-                               color='red',
+                               color='yellow',
                                thickness=4,
                                display_str_list=(),
                                use_normalized_coordinates=True):
@@ -170,10 +170,12 @@ def draw_bounding_box_on_image(image,
                                   ymin * im_height, ymax * im_height)
   else:
     (left, right, top, bottom) = (xmin, xmax, ymin, ymax)
+
   draw.line([(left, top), (left, bottom), (right, bottom),
              (right, top), (left, top)], width=thickness, fill=color)
+
   try:
-    font = ImageFont.truetype('arial.ttf', 24)
+    font = ImageFont.truetype('Arial', 16)      # replace arial.ttf with Arial
   except IOError:
     font = ImageFont.load_default()
 

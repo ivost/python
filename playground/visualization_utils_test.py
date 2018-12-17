@@ -18,11 +18,13 @@ import logging
 import os
 
 import numpy as np
-import PIL.Image as Image
+#import PIL.Image as Image
 import tensorflow as tf
 
-from object_detection.core import standard_fields as fields
-from object_detection.utils import visualization_utils
+#from object_detection.core import standard_fields as fields
+#from object_detection.utils import visualization_utils
+
+import visualization_utils
 
 #_TESTDATA_PATH = 'object_detection/test_images'
 _TESTDATA_PATH = '.'
@@ -48,9 +50,6 @@ class VisualizationUtilsTest(tf.test.TestCase):
     imu = np.concatenate((imr, img), axis=1)
     imd = np.concatenate((imb, imw), axis=1)
     image = np.concatenate((imu, imd), axis=0)
-
-
-
     return image
 
   def create_test_image_with_five_channels(self):
@@ -306,19 +305,39 @@ class VisualizationUtilsTest(tf.test.TestCase):
 
 
 if __name__ == '__main__':
+
     from PIL import Image, ImageFont, ImageDraw, ImageEnhance
+    from subprocess import Popen, PIPE
 
     file_name = "image1.jpg"
     print("reading", file_name)
-    source_img = Image.open(file_name).convert("RGB")
+    img = Image.open(file_name).convert("RGB")
 
-    draw = ImageDraw.Draw(source_img)
+    # draw = ImageDraw.Draw(img)
+    # draw.rectangle(((40, 30), (310, 550)), outline="yellow", width=4)
+    # draw.text((40, 5), "puppies", font=ImageFont.truetype("Arial", 24))
 
-    draw.rectangle(((40, 30), (310, 550)), outline="yellow", width=4)
-    # draw.text((20, 70), "something123", font=ImageFont.truetype("font_path123"))
-    #
+    #test_image = create_colorful_test_image()
+    #test_image = Image.fromarray(test_image)
+
+    width_original, height_original = img.size
+
+    ymin = 0.25
+    ymax = 0.75
+
+    xmin = 0.4
+    xmax = 0.8
+
+    visualization_utils.draw_bounding_box_on_image(img, ymin, xmin, ymax, xmax,
+       display_str_list=[" puppies c=0.94 "])
+
     out_file = "image1.png"
     print("writing", out_file)
-    source_img.save(out_file, "PNG")
+    img.save(out_file, "PNG")
+    Popen(['open', out_file])
+
 
   #tf.test.main()
+
+    # process = Popen(['open', out_file], stdout=PIPE, stderr=PIPE)
+    # stdout, stderr = process.communicate()
