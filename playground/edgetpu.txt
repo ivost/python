@@ -1,0 +1,13 @@
+time python3.5 demo/object_detection.py \
+--model='test_data/mobilenet_ssd_v2_coco_quant_postprocess_edgetpu.tflite' \
+--input='test_data/image1.jpg' \
+--output='r1.jpg'
+
+real	0m1.014s
+user	0m0.792s
+sys	0m0.136s
+
+
+real	0m1.028s
+user	0m0.824s
+sys	0m0.160s
