@@ -26,24 +26,26 @@ from random import seed, randint
 
 def on_receive(client, userdata, message):
     topic = str(message.topic)
-    # message = str(message.payload.decode("utf-8"))
-    val = struct.unpack("h", message.payload)[0]
-    print(topic + ": " + str(val/100.))
+    msg = str(message.payload.decode("utf-8"))
+    #val = struct.unpack("h", message.payload)[0]
+    print(topic + ": " + val)
 
 def main_mqtt():
-    thingy = mqtt.Client("thingy52")
+    thingy = mqtt.Client("ivo-thingy52")
     thingy.connect("test.mosquitto.org", 1883)
-    thingy.subscribe("temperature")
+    thingy.subscribe("tc")
+    thingy.subscribe("hp")
+    thingy.subscribe("ph")
     thingy.on_message = on_receive
     thingy.loop_start()
     seed(1)
 
     # Main program loop
     while 1:
-        value = randint(2400, 2600)
-        v = struct.pack("h", value)
-        thingy.publish("temperature", v)  # Publish message to MQTT broker
-        time.sleep(1)  # Sleep for a second
+        #value = randint(2400, 2600)
+        #v = struct.pack("h", value)
+        #thingy.publish("temperature", v)  # Publish message to MQTT broker
+        time.sleep(10)  # Sleep for a second
 
 
 def lines(file_path):
