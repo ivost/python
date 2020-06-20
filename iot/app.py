@@ -30,22 +30,24 @@ def on_receive(client, userdata, message):
     #val = struct.unpack("h", message.payload)[0]
     print(topic + ": " + val)
 
-def main_mqtt():
+def main():
+    print("MQTT client - connecting")
     thingy = mqtt.Client("ivo-thingy52")
     thingy.connect("test.mosquitto.org", 1883)
+    print("subscribe")
     thingy.subscribe("tc")
     thingy.subscribe("hp")
     thingy.subscribe("ph")
     thingy.on_message = on_receive
+    print("loop1")
     thingy.loop_start()
-    seed(1)
+    print("loop2")
 
     # Main program loop
     while 1:
-        #value = randint(2400, 2600)
-        #v = struct.pack("h", value)
-        #thingy.publish("temperature", v)  # Publish message to MQTT broker
-        time.sleep(10)  # Sleep for a second
+        print("sleep1")
+        time.sleep(1000)  # Sleep for a second
+        print("sleep2")
 
 
 def lines(file_path):
@@ -67,5 +69,8 @@ def readings():
         yield cols
 
 
-for r in readings():
-    print(r)
+#for r in readings():
+#    print(r)
+
+#if __name__ == '__main__':
+main()
