@@ -25,6 +25,7 @@ from random import seed, randint
 # MQTT
 
 def on_receive(client, userdata, message):
+    print("received")
     topic = str(message.topic)
     msg = str(message.payload.decode("utf-8"))
     #val = struct.unpack("h", message.payload)[0]
@@ -35,18 +36,17 @@ def main():
     thingy = mqtt.Client("ivo-thingy52")
     thingy.connect("test.mosquitto.org", 1883)
     print("subscribe")
-    thingy.subscribe("tc")
-    thingy.subscribe("hp")
-    thingy.subscribe("ph")
     thingy.on_message = on_receive
-    print("loop1")
     thingy.loop_start()
-    print("loop2")
+    thingy.subscribe("ivo/tc")
+    thingy.subscribe("ivo/hp")
+    thingy.subscribe("ivo/ph")
+    thingy.loop_start()
 
     # Main program loop
     while 1:
         print("sleep1")
-        time.sleep(1000)  # Sleep for a second
+        time.sleep(1)  # Sleep for a second
         print("sleep2")
 
 

@@ -18,10 +18,11 @@ def mqtt_init():
     global mqtt_client
     mqtt_client = mqtt.Client("ivo-thingy52")
     mqtt_client.connect("test.mosquitto.org", 1883)
+    mqtt_client.loop_start()
 
 def publish(typ, val):
     print('PUBLISH - type:  {}, value: {}'.format(typ, val))
-    mqtt_client.publish(typ, val)  # Publish message to MQTT broker
+    mqtt_client.publish('ivo/'+typ, val)  # Publish message to MQTT broker
 
 def write_uint16(data, value, index):
     """ Write 16bit value into data string at index and return new string """
