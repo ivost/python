@@ -13,16 +13,22 @@ import time
 import binascii
 
 # MQTT
+global client
+broker = "broker.emqx.io"
 
 def mqtt_init():
-    global mqtt_client
-    mqtt_client = mqtt.Client("ivo-thingy52")
-    mqtt_client.connect("test.mosquitto.org", 1883)
-    mqtt_client.loop_start()
+    client = mqtt.Client("ivo-thingy52")
+    print("connecting to broker", broker)
+    client.connect(broker, 1883)
+    print("connected")
 
 def publish(typ, val):
-    print('PUBLISH - type:  {}, value: {}'.format(typ, val))
-    mqtt_client.publish('ivo/'+typ, val)  # Publish message to MQTT broker
+    client.publish(, val)
+    now = int(time.time())
+    msg = f"{now},{i}"
+    topic = f"ivo/{typ}"
+    print(f"sending {topic}:{msg}")
+    client.publish(topic, msg)
 
 def write_uint16(data, value, index):
     """ Write 16bit value into data string at index and return new string """
@@ -385,10 +391,9 @@ class Thingy52(Peripheral):
         self.ui = UserInterfaceService(self)
 
 def main():
+    mqtt_init()
     parser = argparse.ArgumentParser()
-
     #parser.add_argument('mac_address', action='store', help='MAC address of BLE peripheral')
-
     parser.add_argument('-n', action='store', dest='count', default=0,
                             type=int, help="Number of times to loop data")
     parser.add_argument('-t',action='store',type=float, default=10.0, help='time between polling')
