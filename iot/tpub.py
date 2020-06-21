@@ -17,16 +17,19 @@ import binascii
 def mqtt_init():
     global client
     global sensor
-    broker = "broker.emqx.io"
+    global sensor_id
+
+    broker = 'broker.emqx.io'
     sensor = 'cc:c0:16:27:8b:ca'
+    sensor_id = sensor.replace(':', '')
     client = mqtt.Client("ivo-thingy52")
-    print("connecting to broker", broker)
+    print(f"sensor {sensor_id} - connecting to broker {broker}")
     client.connect(broker, 1883)
     print("connected")
 
 def publish(typ, val):
     now = int(time.time())
-    msg = f"{now},{sensor},{val}"
+    msg = f"{now},{sensor_id},{val}"
     topic = f"ivo/{typ}"
     print(f"sending {topic}:{msg}")
     client.publish(topic, msg)
