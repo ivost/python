@@ -13,19 +13,20 @@ import time
 import binascii
 
 # MQTT
-global client
-broker = "broker.emqx.io"
 
 def mqtt_init():
+    global client
+    global sensor
+    broker = "broker.emqx.io"
+    sensor = 'cc:c0:16:27:8b:ca'
     client = mqtt.Client("ivo-thingy52")
     print("connecting to broker", broker)
     client.connect(broker, 1883)
     print("connected")
 
 def publish(typ, val):
-    client.publish(, val)
     now = int(time.time())
-    msg = f"{now},{i}"
+    msg = f"{now},{sensor},{val}"
     topic = f"ivo/{typ}"
     print(f"sending {topic}:{msg}")
     client.publish(topic, msg)
@@ -404,7 +405,7 @@ def main():
     parser.add_argument('--color', action="store_true",default=False)
     args = parser.parse_args()
 
-    args.mac_address = 'cc:c0:16:27:8b:ca'
+    args.mac_address = sensor
 
     print('Connecting to ' + args.mac_address)
     thingy = Thingy52(args.mac_address)
