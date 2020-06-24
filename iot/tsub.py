@@ -33,14 +33,14 @@ def on_message(client, userdata, message):
 
     msg = str(message.payload.decode("utf-8"))
     fields = msg.split(',')
-    # ts = fields[0]
     sensor = fields[1]
     value = float(fields[2]) / 100.
-    t = topic(message.topic)
-    data = '{},sensor={} value={}'.format(t, sensor, value)
-    print("write", data)
+    t = "temp"  #topic(message.topic)
+    m = f"{t},sensor={sensor} value={value}"
+    print("sending", m)
+
     try:
-        writer.write(bucket, org, data)
+        writer.write(bucket, org, m)
     except rest.ApiException as ex:
         # ex = sys.exc_info()[0]
         print(ex)
@@ -52,6 +52,7 @@ def mqtt_init():
     broker = 'broker.emqx.io'
 
     subscriber = mqtt.Client("IvoSC160_2")  # create new instance
+    subscriber.on_message = on_message
 
     print("connecting to broker " + broker)
     subscriber.connect(broker, 1883)
@@ -61,7 +62,6 @@ def mqtt_init():
     subscriber.subscribe("ivo/tc")
     print("subscribed to ivo/tc")
 
-    subscriber.on_message = on_message
 
     #for top in topics:
     #    print("subscribing to topic " + top)
