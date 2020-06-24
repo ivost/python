@@ -2,14 +2,14 @@ import paho.mqtt.client as mqtt
 import time
 
 broker="broker.emqx.io"
-broker = "test.mosquitto.org"   # broker.emqx.io"
+#broker = "test.mosquitto.org"   # broker.emqx.io"
 
 topic = "ivo/tc"
-topic = "sc160_temp"
+#topic = "sc160_temp"
 
 client = mqtt.Client("mypub")
 
-print("connecting to broker", broker)
+print("connecting to broker", broker, "topic", topic)
 client.connect(broker, 1883)
 
 for i in range(12000):
