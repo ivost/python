@@ -9,7 +9,8 @@ from paho.mqtt.client import Client
 
 writer = None
 subscriber = None
-topics = ["ivo/tc", "ivo/hp", "ivo/ph"]
+#topics = ["ivo/tc", "ivo/hp", "ivo/ph"]
+topics = ["ivo/tc"]
 
 
 def influx_init():
