@@ -35,9 +35,8 @@ def on_message(client, userdata, message):
     sensor = fields[1]
     value = float(fields[2]) / 100.
     t = topic(message.topic)
-    print(f"got {t}:{value}")
-    data = f"{t},sensor={sensor} value={value}"
-    print(f"write {data}")
+    data = '{},sensor={} value={}'.format(t, sensor, value)
+    print("write", data)
     try:
         writer.write(bucket, org, data)
     except rest.ApiException as ex:
