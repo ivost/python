@@ -10,11 +10,12 @@ from paho.mqtt.client import Client
 writer = None
 subscriber = None
 #topics = ["ivo/tc", "ivo/hp", "ivo/ph"]
-topics = ["ivo/tc"]
+topics = ["sc160_temp"]
 
 
 def influx_init():
     global writer
+    print("influx_init")
     token = "dirs2RRmP64CaJ6AZ6dkhvvBRCYogzs4mXGG-BEhYboLSFaJ0WBfqmMNEmMxwH58znBM26VPaMeaXOtL9teLKg=="
     client = InfluxDBClient(url="https://us-west-2-1.aws.cloud2.influxdata.com", token=token)
     writer = client.write_api(write_options=SYNCHRONOUS)
@@ -47,26 +48,38 @@ def on_message(client, userdata, message):
 
 def mqtt_init():
     global subscriber
-    broker = "broker.emqx.io"
-    subscriber = mqtt.Client("mysub")  # create new instance
+    broker = "test.mosquitto.org"   # broker.emqx.io"
+    broker = 'broker.emqx.io'
+
+    subscriber = mqtt.Client("IvoSC160_2")  # create new instance
 
     print("connecting to broker " + broker)
     subscriber.connect(broker, 1883)
+    print("connected")
+
+
+    subscriber.subscribe("ivo/tc")
+    print("subscribed to ivo/tc")
+
     subscriber.on_message = on_message
-    for top in topics:
-        print("subscribing to topic " + top)
-        subscriber.subscribe(top)
+
+    #for top in topics:
+    #    print("subscribing to topic " + top)
+    #    subscriber.subscribe(top)
 
 
 def main():
     global subscriber
 
-    influx_init()
     mqtt_init()
+    influx_init()
 
+    print("subscriber.loop_start()")
     subscriber.loop_start()
     while True:
-        time.sleep(10)
+        time.sleep(1)
+
+    print("subscriber.loop_stop()")
     subscriber.loop_stop()  # stop the loop
 
 
