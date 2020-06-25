@@ -37,10 +37,10 @@ def on_message(client, userdata, message):
     value = float(fields[2]) / 100.
     t = "temp"  #topic(message.topic)
     m = f"{t},sensor={sensor} value={value}"
-    print("sending", m)
-
     try:
+        #print("sending", m)
         writer.write(bucket, org, m)
+        print("sent", m)
     except rest.ApiException as ex:
         # ex = sys.exc_info()[0]
         print(ex)
@@ -48,7 +48,7 @@ def on_message(client, userdata, message):
 
 def mqtt_init():
     global subscriber
-    broker = "test.mosquitto.org"   # broker.emqx.io"
+    #broker = "test.mosquitto.org"   # broker.emqx.io"
     broker = 'broker.emqx.io'
 
     subscriber = mqtt.Client("IvoSC160_2")  # create new instance
@@ -58,10 +58,8 @@ def mqtt_init():
     subscriber.connect(broker, 1883)
     print("connected")
 
-
     subscriber.subscribe("ivo/tc")
     print("subscribed to ivo/tc")
-
 
     #for top in topics:
     #    print("subscribing to topic " + top)
@@ -77,10 +75,11 @@ def main():
     print("subscriber.loop_start()")
     subscriber.loop_start()
     while True:
+        #print("sleep")
         time.sleep(1)
 
     print("subscriber.loop_stop()")
-    subscriber.loop_stop()  # stop the loop
+    subscriber.loop_stop()  ## stop the loop
 
 
 main()
