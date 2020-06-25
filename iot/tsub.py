@@ -31,19 +31,24 @@ def on_message(client, userdata, message):
     org = "ac5f998776be2950"
     bucket = "ivo1"
 
-    msg = str(message.payload.decode("utf-8"))
-    fields = msg.split(',')
-    sensor = fields[1]
-    value = float(fields[2]) / 100.
-    t = "temp"  #topic(message.topic)
-    m = f"{t},sensor={sensor} value={value}"
     try:
-        #print("sending", m)
+        print("onmessage")
+        #msg = str(message.payload.decode("utf-8"))
+        msg = str(message.payload.decode("ascii"))
+        print("mqtt received", msg)
+        fields = msg.split(',')
+        print(fields)
+        sensor = str(fields[1])
+        value = str(float(fields[2]) / 100.)
+        t = "temp"  #topic(message.topic)
+        m = f"{t},sensor={sensor} value={value}"
+        print("sending", m)
         writer.write(bucket, org, m)
-        print("sent", m)
-    except rest.ApiException as ex:
+        print("influx sent", m)
+    #except rest.ApiException as ex:
+    except Exception as ex:
         # ex = sys.exc_info()[0]
-        print(ex)
+        print("ERROR", ex)
 
 
 def mqtt_init():
