@@ -1,5 +1,15 @@
-cut pascal dataset python
+"""
+    cut ML datasets
+    https://raw.githubusercontent.com/aalborov/cut_dataset/38c6dd3948ce4084a52c66e2e83c63eb3fa883e9/cut_dataset.py
 
+    python  /home/ivo/github/python/openvino/cut_dataset.py  \
+    --source_images_archive_dir=/home/ivo/ds/coco/val2017.zip \
+    --source_annotations_archive_dir=/home/ivo/ds/coco/annotations_trainval2017.zip \
+    --output_size=20 \
+    --output_archive_dir=/home/ivo/Work/subsets \
+    --first_image=10
+
+"""
 
 import os
 import argparse
@@ -10,39 +20,38 @@ from pathlib import Path
 import json
 
 image_types = ('.jpg', '.jpeg', '.jpe', '.img', '.png', '.bmp')
+
+
 def parser():
-    parser = argparse.ArgumentParser(description=' ')
-    parser.add_argument('--source_archive_dir',
-                        type=str,
-                        required=False,
-                        help='Full path to the source archive')
-    parser.add_argument('--source_images_archive_dir',
-                        type=str,
-                        required=False,
-                        help='Full path to the source archive')
-    parser.add_argument('--source_annotations_archive_dir',
-                        type=str,
-                        required=False,
-                        help='Full path to the source archive')
-    parser.add_argument('--output_size',
-                        type=int,
-                        required=True,
-                        help='Number of images in the output dataset')
-    parser.add_argument('--first_image',
-                        type=int,
-                        required=False,
-                        default=0,
-                        help='Number of the image to start from')
-    parser.add_argument('--output_archive_dir',
-                        type=str,
-                        required=True,
-                        help='Full path to the output archive (without the name of the archive)')
-    parser.add_argument('--dataset_type',
-                        type=str,
-                        choices=['imagenet','voc', 'coco'],
-                        required=True,
-                        help='Dataset format: ImageNet, Pascal VOC, or COCO')
-    return parser
+    p = argparse.ArgumentParser(description=' ')
+    p.add_argument('--source_archive_dir', '-I',
+                   type=str,
+                   help='Full path to the source archive')
+    p.add_argument('--source_images_archive_dir',
+                   type=str,
+                   help='Full path to the source archive')
+    p.add_argument('--source_annotations_archive_dir',
+                   type=str,
+                   help='Full path to the source annotation archive')
+    p.add_argument('--output_archive_dir', '-O',
+                   type=str,
+                   default="/tmp",
+                   help='Full path to the output archive (without the name of the archive)')
+    p.add_argument('--dataset_type', '-T',
+                   type=str,
+                   choices=['imagenet', 'voc', 'coco'],
+                   default='coco',
+                   help='Dataset format: ImageNet, Pascal VOC, or COCO')
+
+    p.add_argument('--output_size',
+                   type=int,
+                   default=10,
+                   help='Number of images in the output dataset')
+    p.add_argument('--first_image',
+                   type=int,
+                   default=0,
+                   help='Number of the image to start from')
+    return p
 
 
 def unarchive(source_archive_dir, output_folder_dir):
@@ -79,7 +88,7 @@ def cut_imagenet(output_size, output_folder_dir, first_image):
     with open(annotation_path, 'r') as annotation:
         annotation_text = annotation.readlines()
 
-    new_annotation_text = annotation_text[first_image:output_size+first_image]
+    new_annotation_text = annotation_text[first_image:output_size + first_image]
 
     with open(annotation_path, 'w') as new_annotation:
         for line in new_annotation_text:
@@ -122,8 +131,8 @@ def cut_voc(output_size, output_folder_dir, first_image):
     if not is_possible_to_cut(len(images_files), output_size, first_image):
         sys.exit('Invalid --first_image value. The number of the starting image should be less than the difference\n'
                  'between the dataset and subset sizes.')
-    
-    images_files = images_files[first_image:first_image+output_size]
+
+    images_files = images_files[first_image:first_image + output_size]
 
     main_dir = os.path.join(voc_root_dir, 'ImageSets', 'Main')
 
@@ -188,7 +197,7 @@ def cut_coco(output_size, output_folder_dir, first_image):
     with open(annotation_dir) as json_file:
         json_data = json.load(json_file)
 
-    json_data['images'] = json_data['images'][first_image:output_size+first_image]
+    json_data['images'] = json_data['images'][first_image:output_size + first_image]
 
     image_filenames = []
     image_ids = []
@@ -242,14 +251,16 @@ if __name__ == '__main__':
     args = parser().parse_args()
 
     output_folder_dir = os.path.join(args.output_archive_dir, 'subset_folder')
-    output_archive_name = '{}_subset_{}_{}'.format(args.dataset_type, args.first_image, args.first_image + args.output_size - 1)
+    output_archive_name = '{}_subset_{}_{}'.format(args.dataset_type, args.first_image,
+                                                   args.first_image + args.output_size - 1)
 
     if is_imagenet(args.dataset_type) and not args.source_archive_dir:
         sys.exit('--source_archive_dir is required for the selected dataset type.')
     if is_voc(args.dataset_type) and not args.source_archive_dir:
         sys.exit('--source_archive_dir is required for the selected dataset type.')
     if is_coco(args.dataset_type) and (not args.source_images_archive_dir or not args.source_annotations_archive_dir):
-        sys.exit('Both --source_images_archive_dir and --source_annotations_archive_dir are required for the selected dataset type.')
+        sys.exit(
+            'Both --source_images_archive_dir and --source_annotations_archive_dir are required for the selected dataset type.')
 
     if is_imagenet(args.dataset_type):
         unarchive(args.source_archive_dir, output_folder_dir)
