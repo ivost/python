@@ -18,7 +18,7 @@ class StoredImage:
 
     def get_image(self):
         """ Returns the image as a numpy array. """
-        image = np.frombuffer(self.image, dtype=np.uint8)
+        image = np.frombuffer(self.image, dtype=np.float32)
         return image.reshape(*self.size, self.channels)
 
 
@@ -43,16 +43,18 @@ def store_single_lmdb(image, image_id, label):
         label       image label
     """
     map_size = image.nbytes * 10
-
+    print(f"Storing image {image_id} {image.nbytes}")
     # Create a new LMDB environment
-    env = lmdb.open(str(lmdb_dir / f"single_lmdb"), map_size=map_size)
+    env = lmdb.open(str(lmdb_dir / f"single"), map_size=map_size)
 
     # Start a new write transaction
     with env.begin(write=True) as txn:
         # All key-value pairs need to be strings
         value = StoredImage(image, label)
         key = f"{image_id:08}"
-        txn.put(key.encode("ascii"), pickle.dumps(value))
+        s = pickle.dumps(value)
+        print(f"pickled size {len(s)}")
+        txn.put(key.encode("ascii"), s)
     env.close()
 
 
@@ -70,12 +72,13 @@ def read_single_lmdb(image_id):
     """
 
     # Open the LMDB environment
-    env = lmdb.open(str(lmdb_dir / f"single_lmdb"), readonly=True)
+    env = lmdb.open(str(lmdb_dir / f"single"), readonly=True)
 
     # Start a new read transaction
     with env.begin() as txn:
         # Encode the key the same way as we stored it
         data = txn.get(f"{image_id:08}".encode("ascii"))
+        print(f"data size {len(data)}")
         im = pickle.loads(data)
         # Retrieve the relevant bits
         image = im.get_image()
@@ -91,6 +94,7 @@ def main():
     hdf5_dir.mkdir(parents=True, exist_ok=True)
     # image = Image.open(args.input).convert('RGB').resize(size, Image.ANTIALIAS)
     infile = "./data/images/image1.jpg"
+
     with Image.open(infile) as im:
         print(f"Reading {infile}, format: {im.format}, size: {im.size}, mode: {im.mode}")
         if keep_aspect:
@@ -107,16 +111,20 @@ def main():
 
         if im.mode != im_mode:
             im = im.convert(im_mode)
-        ima = np.asarray(im, dtype=np.float32) / 255
-        print(f"array shape {ima.shape}")
+
+        #ima = np.asarray(im, dtype=uint8) / 255
+
+        #ima = np.array(im)
+        print(f"array shape {ima.shape} {ima.dtype}")
 
         # sleep(1)
-        im_id = 3
-        store_single_lmdb(ima, im_id, "dog")
-
-        a, lab = read_single_lmdb(im_id)
-        print(f"label {lab}")
-
+        # im_id = 3
+        # store_single_lmdb(ima, im_id, "dog")
+        #
+        # a, lab = read_single_lmdb(im_id)
+        # print(f"label {lab}")
+        # b = Image.fromarray(a.astype('float32'), 'RGB')
+        # b.show()
 
 if __name__ == '__main__':
     main()
