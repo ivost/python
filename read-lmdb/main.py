@@ -9,14 +9,10 @@ from timeit import timeit
 from pathlib import Path
 
 
-class ImageCifar:
+class StoredImage:
     def __init__(self, image, label):
-        # Dimensions of image for reconstruction - not really necessary
-        # for this dataset, but some datasets may include images of
-        # varying sizes
         self.channels = image.shape[2]
         self.size = image.shape[:2]
-
         self.image = image.tobytes()
         self.label = label
 
@@ -26,10 +22,11 @@ class ImageCifar:
         return image.reshape(*self.size, self.channels)
 
 
+keep_aspect = True
+show_image = False
 base_width = 224
 base_height = 224
 keep_aspect = False
-keep_aspect = True
 im_mode = 'RGB'
 
 disk_dir = Path("data/disk/")
@@ -41,7 +38,7 @@ def store_single_lmdb(image, image_id, label):
     """ Stores a single image to a LMDB.
         Parameters:
         ---------------
-        image       image array, (w, h, 3) to be stored
+        image       image array, (h, w, 3) to be stored
         image_id    integer unique ID for image
         label       image label
     """
@@ -53,10 +50,39 @@ def store_single_lmdb(image, image_id, label):
     # Start a new write transaction
     with env.begin(write=True) as txn:
         # All key-value pairs need to be strings
-        value = ImageCifar(image, label)
+        value = StoredImage(image, label)
         key = f"{image_id:08}"
         txn.put(key.encode("ascii"), pickle.dumps(value))
     env.close()
+
+
+def read_single_lmdb(image_id):
+
+    """ Stores a single image to LMDB.
+        Parameters:
+        ---------------
+        image_id    integer unique ID for image
+
+        Returns:
+        ----------
+        image       numpy image array
+        label       associated meta data, int label
+    """
+
+    # Open the LMDB environment
+    env = lmdb.open(str(lmdb_dir / f"single_lmdb"), readonly=True)
+
+    # Start a new read transaction
+    with env.begin() as txn:
+        # Encode the key the same way as we stored it
+        data = txn.get(f"{image_id:08}".encode("ascii"))
+        im = pickle.loads(data)
+        # Retrieve the relevant bits
+        image = im.get_image()
+        label = im.label
+
+    env.close()
+    return image, label
 
 
 def main():
@@ -76,16 +102,20 @@ def main():
             print(f"Resizing to {base_width}, {base_height}")
             im = im.resize((base_width, base_height), Image.ANTIALIAS)
 
-        im.show()
+        if show_image:
+            im.show()
 
         if im.mode != im_mode:
             im = im.convert(im_mode)
-        ima = np.array(im)
+        ima = np.asarray(im, dtype=np.float32) / 255
         print(f"array shape {ima.shape}")
 
         # sleep(1)
-        im_id = 1
+        im_id = 3
         store_single_lmdb(ima, im_id, "dog")
+
+        a, lab = read_single_lmdb(im_id)
+        print(f"label {lab}")
 
 
 if __name__ == '__main__':
