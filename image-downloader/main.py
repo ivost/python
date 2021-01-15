@@ -1,10 +1,27 @@
-from google_images_download import google_images_download  # importing the library
+"""
 
-response = google_images_download.googleimagesdownload()  # class instantiation
+https://google-images-download.readthedocs.io/en/latest/examples.html
 
-arguments = {"keywords": "Honey Bottle,honey,honey squeeze", "limit": 111,
-             "chromedriver": "C:\\Drivers\\chromedriver\\chromedriver.exe",
-             "print_urls": True}  # creating list of arguments
-# Make sure to set chromedrive is the appropriate director if you want to download more than 100 images
-paths = response.download(arguments)  # passing the arguments to the function
-print(paths)  # printing absolute paths of the downloaded images
+git clone https://github.com/hardikvasa/google-images-download.git
+
+pip install google_images_download
+
+"chromedriver": "/Users/ivo/tools/chromedriver",
+
+"chromedriver": "C:\\Drivers\\chromedriver\\chromedriver.exe",
+
+"""
+from google_images_download import google_images_download
+
+CHROME = "/Users/ivo/tools/chromedriver"
+
+response = google_images_download.googleimagesdownload()
+
+arguments = {"keywords": "birds,bears",
+             "chromedriver": CHROME,
+             "limit": 10,
+             "print_urls": True}
+
+paths = response.download(arguments)
+
+print(paths)
