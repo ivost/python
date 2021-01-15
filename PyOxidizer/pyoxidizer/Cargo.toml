@@ -1,0 +1,65 @@
+[package]
+name = "pyoxidizer"
+version = "0.8.0-pre"
+authors = ["Gregory Szorc <gregory.szorc@gmail.com>"]
+license = "MPL-2.0"
+description = "Package self-contained Python applications"
+readme = "../README.md"
+homepage = "https://github.com/indygreg/PyOxidizer"
+repository = "https://github.com/indygreg/PyOxidizer.git"
+keywords = ["python"]
+edition = "2018"
+build = "build.rs"
+
+# We rename the library so we can have crate documentation for both the
+# library and the binary.
+[lib]
+name = "pyoxidizerlib"
+path = "src/lib.rs"
+
+[build-dependencies]
+vergen = "3"
+
+[dependencies]
+anyhow = "1.0"
+byteorder = "1.2"
+cargo_toml = "0.8"
+cc = "1.0"
+clap = "2.32"
+codemap = "0.1"
+codemap-diagnostic = "0.1"
+copy_dir = "0.1"
+crc = "1.8"
+fs2 = "0.4"
+git2 = "0.13"
+glob = "0.3"
+goblin = "0.2"
+handlebars = "3.0"
+hex = "0.4"
+indoc = "0.3"
+itertools = "0.9"
+lazy_static = "1.4"
+libc = "0.2"
+path-dedot = "1.1"
+podio = "0.1"
+python-packaging = { version = "0.1.0-pre", path = "../python-packaging" }
+python-packed-resources = { version = "0.2.0-pre", path = "../python-packed-resources" }
+reqwest = { version = "0.10", features = ["blocking"] }
+rustc_version = "0.2"
+semver = "0.9"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+sha2 = "0.8"
+slog = "2.4"
+starlark = "0.2"
+tar = "0.4"
+tempdir = "0.3"
+url = "2.1"
+uuid = { version = "0.8", features = ["v4", "v5"] }
+version-compare = "0.0"
+walkdir = "2"
+zip = "0.5"
+zstd = "0.5"
+
+[dev-dependencies]
+indoc = "0.3"

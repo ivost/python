@@ -1,0 +1,23 @@
+[package]
+name = "python-packaging"
+version = "0.1.0-pre"
+authors = ["Gregory Szorc <gregory.szorc@gmail.com>"]
+edition = "2018"
+license = "MPL-2.0"
+description = "Python packaging primitives implemented in Rust"
+readme = "README.md"
+homepage = "https://github.com/indygreg/PyOxidizer"
+repository = "https://github.com/indygreg/PyOxidizer.git"
+keywords = ["python"]
+
+[dependencies]
+anyhow = "1.0"
+byteorder = "1.2"
+encoding_rs = "0.8"
+itertools = "0.9"
+lazy_static = "1.4"
+mailparse = "0.12"
+python-packed-resources = { version = "0.2.0-pre", path = "../python-packed-resources" }
+regex = "1"
+tempdir = "0.3"
+walkdir = "2"
