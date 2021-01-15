@@ -1,7 +1,19 @@
 
+#url = "https://www.google.com/search?q=Closeup+Covid+Face+Masks&hl=en&gbv=1&tbm=isch&start=##&sa=N"
+# mask
+#url = "https://www.google.com/search?q=Closeup+Covid+Face+Masks&hl=en&sxsrf=ALeKk02Vd1XNFhc-eD5dlDbF_BaGc7CSYQ:1594673474577&source=lnms&tbm=isch&sa=X&ved=0ahUKEwj5hvDPjcvqAhUoFjQIHRkbCagQ_AUICSgC&start=##&sa=N"
+
+# no mask
+url = "https://www.google.com/search?q=people+face+closeup&tbm=isch&ved=2ahUKEwjgrPq3n8vqAhWViZ4KHYxoC9cQ2-cCegQIABAA&oq=people+face+closeup&gs_lcp=CgNpbWcQA1DRNljRNmCYOWgAcAB4AIABT4gBT5IBATGYAQCgAQGqAQtnd3Mtd2l6LWltZw&sclient=img&ei=8NsMX-D0DpWT-gSM0a24DQ&start=##&sa=N"
+
+
+
 https://requests.readthedocs.io/en/master/
+
 https://www.crummy.com/software/BeautifulSoup/bs4/doc/
+
 https://www.dataquest.io/blog/web-scraping-tutorial-python/
+
 https://medium.com/@intprogrammer/how-to-scrape-google-for-images-to-train-your-machine-learning-classifiers-on-565076972ce
 
 https://www.google.com/_/VisualFrontendUi/data/batchexecute?rpcids=HoAMBc&f.sid=-5684935023478549336&bl=boq_visualfrontendserver_20200709.09_p0&hl=en&soc-app=162&soc-platform=1&soc-device=1&authuser=0&_reqid=774169&rt=c

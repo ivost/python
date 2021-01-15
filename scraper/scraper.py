@@ -4,16 +4,10 @@
 import requests
 from bs4 import BeautifulSoup
 
-#url = "https://www.google.com/search?q=Closeup+Covid+Face+Masks&hl=en&gbv=1&tbm=isch&start=##&sa=N"
-# mask
-#url = "https://www.google.com/search?q=Closeup+Covid+Face+Masks&hl=en&sxsrf=ALeKk02Vd1XNFhc-eD5dlDbF_BaGc7CSYQ:1594673474577&source=lnms&tbm=isch&sa=X&ved=0ahUKEwj5hvDPjcvqAhUoFjQIHRkbCagQ_AUICSgC&start=##&sa=N"
-
-# no mask
-url = "https://www.google.com/search?q=people+face+closeup&tbm=isch&ved=2ahUKEwjgrPq3n8vqAhWViZ4KHYxoC9cQ2-cCegQIABAA&oq=people+face+closeup&gs_lcp=CgNpbWcQA1DRNljRNmCYOWgAcAB4AIABT4gBT5IBATGYAQCgAQGqAQtnd3Mtd2l6LWltZw&sclient=img&ei=8NsMX-D0DpWT-gSM0a24DQ&start=##&sa=N"
+KEYWORD="birds"
+url = f"https://www.google.com/search?q={KEYWORD}&tbm=isch&ved=2ahUKEwjgrPq3n8vqAhWViZ4KHYxoC9cQ2-cCegQIABAA&oq=people+face+closeup&gs_lcp=CgNpbWcQA1DRNljRNmCYOWgAcAB4AIABT4gBT5IBATGYAQCgAQGqAQtnd3Mtd2l6LWltZw&sclient=img&ei=8NsMX-D0DpWT-gSM0a24DQ&start=##&sa=N"
 
 idx = 1
-# import time
-# milliseconds = int(round(time.time() * 1000))
 fcount = 0
 
 done = False
@@ -29,9 +23,6 @@ while not done:
         break
     soup = BeautifulSoup(page.content, 'html.parser')
     #print(soup.prettify())
-
-    #for img in soup.find_all('a'):
-        #<a href = "/url?q=https://www.pinterest.com/pin/204280533082051994/&amp;sa=U&amp;ved=2ahUKEwjnlJ-VoMvqAhVLKDQIHdpAA4MQr4kDMBF6BAgCEAI&amp;usg=AOvVaw24A4Gv2tB9JDTXHcOd7AKl" >
 
     for img in soup.find_all('img'):
         url2 = img.attrs["src"]
