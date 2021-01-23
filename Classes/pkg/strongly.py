@@ -1,14 +1,9 @@
 """
-    data annotation: requires python 3.6+
+    data annotations: requires python 3.6+
 """
 from typing import List
 
-primes: List[int] = []
-
-primes.append(2)
-primes.append(3)
-primes.append(5)
-primes.append(7)
+primes: List[int] = [2, 3, 5, 7]
 
 print(primes)
 # warning
