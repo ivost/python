@@ -1,16 +1,26 @@
-# This is a sample Python script.
+import setuptools
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+"""
 
+python3 setup.py sdist
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+# to test
+cd dist && python3 –m pip install *
 
+twine upload --repository-url=https://test.pypi.org/legacy/ dist/*
 
-# Press the green button in the gutter to run the script.
+https://test.pypi.org/project/ivostoy-test-pkg/1.0.0/
+
+pip install -i https://test.pypi.org/simple  ivostoy-test-pkg
+
+"""
+from ivostoy_test_pkg.MyDate import MyDate
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    p = setuptools.find_packages()
+    print(p)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    d = MyDate(2021, 1, 23)
+    print(d)
+    print(d.add_days(40))
+    print(d.isoweekday())

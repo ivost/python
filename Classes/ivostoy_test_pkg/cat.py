@@ -1,4 +1,4 @@
-from pkg.pet import Pet
+from ivostoy_test_pkg.pet import Pet
 
 
 class Cat(Pet):
