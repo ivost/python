@@ -18,5 +18,8 @@ class InventoryItem:
 if __name__ == '__main__':
     # print("python", sys.version_info)
     # python sys.version_info(major=3, minor=6, micro=9, releaselevel='final', serial=0)
-    item = InventoryItem('hammers', 10.49, 12)
+    item = InventoryItem('pythons', 5, 2)
     print(f"total: {item.total_cost()}")
+
+    item2 = InventoryItem('hammers', unit_price=10.49, quantity_on_hand=12)
+    print(f"total: {item2.total_cost()}")
