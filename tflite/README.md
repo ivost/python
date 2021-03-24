@@ -1,5 +1,7 @@
 
 
+pip3 install --extra-index-url https://google-coral.github.io/py-repo/ tflite_runtime
+
 https://github.com/tensorflow/tensorflow/tree/master/tensorflow/lite/examples/python/
 
 
@@ -17,4 +19,24 @@ python3 label_image.py \
   --model_file ./model/mobilenet_v1_1.0_224.tflite \
   --label_file ./model/labels.txt \
   --image ./grace_hopper.bmp
+
+on Mac
+
+./run.sh
+tflite interpreter
+0.919720: 653:military uniform
+0.017762: 907:Windsor tie
+0.007507: 668:mortarboard
+0.005419: 466:bulletproof vest
+0.003828: 458:bow tie, bow-tie, bowtie
+time: 34.587ms
+
+tflite_runtime interpreter
+0.919721: 653:military uniform
+0.017762: 907:Windsor tie
+0.007507: 668:mortarboard
+0.005419: 466:bulletproof vest
+0.003828: 458:bow tie, bow-tie, bowtie
+time: 43.132ms
+
 
