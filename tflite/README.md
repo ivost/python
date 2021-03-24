@@ -40,3 +40,24 @@ tflite_runtime interpreter
 time: 43.132ms
 
 
+CONVERSION
+https://www.tensorflow.org/lite/convert
+
+https://www.tensorflow.org/guide/saved_model
+
+
+usage: tflite_convert [-h] --output_file OUTPUT_FILE
+                      [--saved_model_dir SAVED_MODEL_DIR | --keras_model_file KERAS_MODEL_FILE]
+                      [--enable_v1_converter]
+                      [--experimental_new_converter [EXPERIMENTAL_NEW_CONVERTER]]
+
+
+tflite_convert \
+  --saved_model_dir=./mobilenet_v1_1.0_224/ \
+  --output_file=./mobilenet.tflite
+  
+
+  
+
+
+
