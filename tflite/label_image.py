@@ -36,17 +36,17 @@ if __name__ == '__main__':
   parser.add_argument(
       '-i',
       '--image',
-      default='/tmp/grace_hopper.bmp',
+      default='./grace_hopper.bmp',
       help='image to be classified')
   parser.add_argument(
       '-m',
       '--model_file',
-      default='/tmp/mobilenet_v1_1.0_224_quant.tflite',
+      default='./model/mobilenet_v1_1.0_224_quant.tflite',
       help='.tflite model to be executed')
   parser.add_argument(
       '-l',
       '--label_file',
-      default='/tmp/labels.txt',
+      default='./model/labels.txt',
       help='name of file containing labels')
   parser.add_argument(
       '--input_mean',
@@ -99,4 +99,3 @@ if __name__ == '__main__':
       print('{:08.6f}: {}'.format(float(results[i] / 255.0), labels[i]))
 
   print('time: {:.3f}ms'.format((stop_time - start_time) * 1000))
-  

@@ -13,4 +13,8 @@ wget https://storage.googleapis.com/download.tensorflow.org/models/mobilenet_v1_
 # Get labels
 wget https://storage.googleapis.com/download.tensorflow.org/models/mobilenet_v1_1.0_224_frozen.tgz  | tar xzv -C /tmp  mobilenet_v1_1.0_224/labels.txt
 
+python3 label_image.py \
+  --model_file ./model/mobilenet_v1_1.0_224.tflite \
+  --label_file ./model/labels.txt \
+  --image ./grace_hopper.bmp
 
